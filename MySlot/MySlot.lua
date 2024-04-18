@@ -1,4 +1,4 @@
-﻿local MySlot_Profile={}
+local MySlot_Profile={}
 local MacroIcon = {}
 
 for i=1, GetNumMacroIcons() do
@@ -67,7 +67,7 @@ end
 local function myCreateMacro(arg1)
 	local g,l = GetNumMacros()
 	if ((arg1["e"] and l==18) or (arg1["e"]==nil and g==36)) then
-		MySlot_Print("宏 ["..arg1["b"].." ] 被忽略，因为你没有在公共或个人宏区域没有足够的空格，请准备足够的空格后重新导入")
+		MySlot_Print("Macro ["..arg1["b"].." ] couldn't be imported - not enough macro space!")
 		return nil
 	end
 	return CreateMacro(arg1["b"],arg1["c"],(arg1["d"]),arg1["e"],1)
@@ -158,9 +158,9 @@ local function myGetKeyBinding()
 end
 
 StaticPopupDialogs["MYSLOT_MSGBOX"] = {
-	text = "你 确定 要导入么？？？",
-	button1 = "确定",
-	button2 = "取消",
+	text = "Import template?",
+	button1 = "Yes",
+	button2 = "No",
 	timeout = 0,
 	whileDead = 1,
 	hideOnEscape = 1,
@@ -207,7 +207,7 @@ StaticPopupDialogs["MYSLOT_MSGBOX"] = {
 			end
 		end
 		
-		MySlot_Print("所有按钮及按键邦定位置恢复完毕")
+		MySlot_Print("Template applied.")
 	end,
 }
 
@@ -228,13 +228,13 @@ function MySlot_Export()
 	t[#t+1]="[999]={"..myGetKeyBinding().."},"
 	
 	s="@ --------------------\n"..s
-	s="@ 问题/建议请联系 farmer1992@gmail.com\n"..s
+	s="@ Author: farmer1992@gmail.com\n"..s
 	s="@ \n"..s
-	s="@ 等级："..UnitLevel("player").."\n"..s
-	s="@ 职业："..UnitClass("player").."\n"..s
-	s="@ 人物："..UnitName("player").."\n"..s
-	s="@ 天赋："..select(3,GetTalentTabInfo(1)).."/"..select(3,GetTalentTabInfo(2)).."/"..select(3,GetTalentTabInfo(3)).."\n"..s
-	s="@ Myslot 导出数据"..date().."\n"..s
+	s="@ Level："..UnitLevel("player").."\n"..s
+	s="@ Class"..UnitClass("player").."\n"..s
+	s="@ Name:"..UnitName("player").."\n"..s
+	s="@ Spec:"..select(3,GetTalentTabInfo(1)).."/"..select(3,GetTalentTabInfo(2)).."/"..select(3,GetTalentTabInfo(3)).."\n"..s
+	s="@ Myslot Exportdate: "..date().."\n"..s
 	
 	s=s..HumBase64.enc(table.concat(t))
 
@@ -248,7 +248,7 @@ end
 function MySlot_Import()
 
 	if InCombatLockdown() then
-		MySlot_Print("请在非战斗时候使用导入功能")
+		MySlot_Print("Leave combat first!")
 	end
 
 	local s=MYSLOT_ReportFrame_EditBox:GetText() or ""
@@ -266,7 +266,7 @@ function MySlot_Import()
 
 		StaticPopup_Show("MYSLOT_MSGBOX")
 	else
-		MySlot_Print("导入字符串有错误 不能导入")
+		MySlot_Print("String contains errors!")
 	end
 	
 end
@@ -284,8 +284,8 @@ SLASH_Myslot1 = "/Myslot"
 
 
 function MySlot_Clearall()
-		for i=1,120 do
-				PickupAction(i)
-				ClearCursor()
-		end
+	for i=1,120 do
+		PickupAction(i)
+		ClearCursor()
+	end
 end
